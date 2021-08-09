@@ -30,6 +30,19 @@ updated_files=$(git diff --name-only $source_ref $target_ref)
 
 export_files=()
 
+filterMatchedPattern() {
+    files=$1
+    pattern=$2
+    local export_files=()
+    for f in $files
+    do
+        if [[ $f =~ $pattern ]]; then
+            export_files+=(${f})
+        fi
+    done
+    echo $export_files
+}
+
 for f in $updated_files
 do
     if [[ $f =~ $pattern ]]; then
