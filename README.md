@@ -1,4 +1,4 @@
-[![Build](https://github.com/jupeter/git-helpers/workflows/release/badge.svg)](https://github.com/jupeter/git-helpers)
+[![Build](https://github.com/jupeter/git-helpers/actions/workflows/release.yml/badge.svg)](https://github.com/jupeter/git-helpers)
 
 # GIT Helpers
 
