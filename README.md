@@ -1,4 +1,7 @@
 [![Build](https://github.com/jupeter/git-helpers/actions/workflows/release.yml/badge.svg)](https://github.com/jupeter/git-helpers)
+[![Coverage](https://codecov.io/gh/jupeter/git-helpers/branch/main/graph/badge.svg)](https://codecov.io/gh/jupeter/git-helpers)
+[![Go Report Card](https://goreportcard.com/badge/github.com/jupeter/git-helpers)](https://goreportcard.com/report/github.com/jupeter/git-helperse)
+[![License](https://img.shields.io/badge/license-MIT-green)](LICENSE)
 
 # GIT Helpers
 
