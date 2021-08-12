@@ -10,12 +10,15 @@ import (
 	"syscall"
 )
 
+// required for mock testing
+var myGitCommand = gitCommand
+
 func gitCurrentBranch() string {
-	return gitCommand("rev-parse", "--abbrev-ref", "HEAD")
+	return myGitCommand("rev-parse", "--abbrev-ref", "HEAD")
 }
 
 func gitGetUpdatedFiles(sourceBranchName string, targetBranchName string) []string {
-	files := gitCommand("diff", "--name-only", sourceBranchName, targetBranchName)
+	files := myGitCommand("diff", "--name-only", sourceBranchName, targetBranchName)
 
 	return strings.Split(files, "\n")
 }
