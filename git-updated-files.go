@@ -3,67 +3,39 @@ package main
 import (
 	"flag"
 	"fmt"
-	"io/ioutil"
 	"log"
-	"os/exec"
 	"path/filepath"
 	"regexp"
 	"strings"
 	"syscall"
 )
 
-func lookForGitPath() string {
-	binary, lookErr := exec.LookPath("git")
-	if lookErr != nil {
-		panic(lookErr)
-	}
-	return binary
-}
-
 func gitCurrentBranch() string {
-	gitPath := lookForGitPath()
-	cmd := exec.Command(gitPath, "rev-parse", "--abbrev-ref", "HEAD")
-
-	cmdOut, _ := cmd.StdoutPipe()
-	cmd.Start()
-	bytes, _ := ioutil.ReadAll(cmdOut)
-
-	return strings.TrimSpace(string(bytes))
+	return gitCommand("rev-parse", "--abbrev-ref", "HEAD")
 }
 
 func gitGetUpdatedFiles(sourceBranchName string, targetBranchName string) []string {
-	gitPath := lookForGitPath()
-	cmd := exec.Command(gitPath, "diff", "--name-only", sourceBranchName, targetBranchName)
-
-	cmdOut, _ := cmd.StdoutPipe()
-	cmd.Start()
-	bytes, _ := ioutil.ReadAll(cmdOut)
-
-	files := strings.TrimSpace(string(bytes))
+	files := gitCommand("diff", "--name-only", sourceBranchName, targetBranchName)
 
 	return strings.Split(files, "\n")
 }
 
 func validateBranchExist(branchName string) {
-	gitPath := lookForGitPath()
-	cmd := exec.Command(gitPath, "rev-parse", "--verify", branchName)
-
-	cmd.Start()
-
-	if err := cmd.Wait(); err != nil {
-		if exiterr, ok := err.(*exec.ExitError); ok {
-			if status, ok := exiterr.Sys().(syscall.WaitStatus); ok {
-				if status.ExitStatus() == 128 {
-					log.Printf("Missing branch name '%s'.", branchName)
-					syscall.Exit(128)
-				}
-				log.Fatalf("Error during validaton branch. Status: %d", status.ExitStatus())
-				syscall.Exit(1)
-			}
-		}
-		log.Fatalf("Could not receive response: %v", err)
-		syscall.Exit(1)
+	if gitCommandStatus("rev-parse", "--verify", branchName) == 128 {
+		log.Printf("Missing branch name '%s'.", branchName)
+		syscall.Exit(128)
 	}
+}
+
+func validateGitRepositoryExist() {
+	if !gitRepositoryExist() {
+		log.Printf("not a git repository (or any of the parent directories): .git")
+		syscall.Exit(128)
+	}
+}
+
+func gitRepositoryExist() bool {
+	return gitCommandStatus("status") != 128
 }
 
 func filterNotMatched(files []string, pattern string) []string {
@@ -110,6 +82,7 @@ func main() {
 
 	flag.Parse()
 
+	validateGitRepositoryExist()
 	validateBranchExist(*sourceRefPtr)
 	validateBranchExist(*targetRefPtr)
 
