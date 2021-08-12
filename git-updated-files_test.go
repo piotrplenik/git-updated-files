@@ -5,6 +5,39 @@ import (
 	"testing"
 )
 
+func TestGitCurrentBranch(t *testing.T) {
+	old := myGitCommand
+	defer func() { myGitCommand = old }()
+
+	expect := "feature/test-branch"
+
+	myGitCommand = func(arg ...string) string {
+		return expect
+	}
+
+	result := gitCurrentBranch()
+	if result != expect {
+		t.Errorf("Not able to get current branch (result: '%s', expect: '%s')", result, expect)
+	}
+}
+
+func TestGitGetUpdatedFiles(t *testing.T) {
+	old := myGitCommand
+	defer func() { myGitCommand = old }()
+
+	expect := "aa\nbb\ncc"
+
+	myGitCommand = func(arg ...string) string {
+		return expect
+	}
+
+	result := gitGetUpdatedFiles("branchA", "branchB")
+	if len(result) != 3 {
+		t.Errorf("Wrong updated files (result: '%s', expect: '%s')", result, expect)
+	}
+
+}
+
 func TestFilterNotMatchedDefaultRule(t *testing.T) {
 	files := []string{"file1", "file2", "directory/subdirectory/file3"}
 	pattern := ".*"
