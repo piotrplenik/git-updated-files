@@ -17,8 +17,14 @@ func gitCurrentBranch() string {
 	return myGitCommand("rev-parse", "--abbrev-ref", "HEAD")
 }
 
-func gitGetUpdatedFiles(sourceBranchName string, targetBranchName string) []string {
-	files := myGitCommand("diff", "--name-only", sourceBranchName, targetBranchName)
+func gitGetUpdatedFiles(sourceBranchName string, targetBranchName string, deletedOnly bool) []string {
+	// By default filter only `A`-Added, `C`-Copied, `M`-Modified, `R`-Renamed
+	diffFilter := "ACMR"
+	if deletedOnly {
+		// When deletedOnly is enabled, filter `D`-Deleted only
+		diffFilter = "D"
+	}
+	files := myGitCommand("diff", "--name-only", "--diff-filter="+diffFilter, sourceBranchName, targetBranchName)
 
 	return strings.Split(files, "\n")
 }
@@ -82,6 +88,7 @@ func main() {
 	targetRefPtr := flag.String("target-ref", "main", "GIT target reference")
 	matchPtr := flag.String("filter", ".*", "Regular expression for match")
 	directoriesOnlyPtr := flag.Bool("directories-only", true, "Display files only")
+	deletedOnlyPtr := flag.Bool("deleted", false, "Display deleted only")
 
 	flag.Parse()
 
@@ -89,7 +96,7 @@ func main() {
 	validateBranchExist(*sourceRefPtr)
 	validateBranchExist(*targetRefPtr)
 
-	files := gitGetUpdatedFiles(*sourceRefPtr, *targetRefPtr)
+	files := gitGetUpdatedFiles(*sourceRefPtr, *targetRefPtr, *deletedOnlyPtr)
 	filteredFiles := filterNotMatched(files, *matchPtr)
 
 	displayOutput := displayFormat(filteredFiles, *directoriesOnlyPtr)

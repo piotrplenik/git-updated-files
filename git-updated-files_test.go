@@ -31,7 +31,7 @@ func TestGitGetUpdatedFiles(t *testing.T) {
 		return expect
 	}
 
-	result := gitGetUpdatedFiles("branchA", "branchB")
+	result := gitGetUpdatedFiles("branchA", "branchB", false)
 	if len(result) != 3 {
 		t.Errorf("Wrong updated files (result: '%s', expect: '%s')", result, expect)
 	}

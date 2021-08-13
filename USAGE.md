@@ -7,7 +7,8 @@
 | `--source-ref` | GIT source reference | Current branch |
 | `--target-ref` | GIT target reference | `main` |
 | `--filter` | Regular expression for files matching | `.*` |
-| `--directories-only` | Display directories instead of files | `true |
+| `--directories-only` | Display directories instead of files | `true` |
+| `--deleted` | Show deleted instead of added/updated | `false` |
 
 ## Sample usage
 
