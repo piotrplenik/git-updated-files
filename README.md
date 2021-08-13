@@ -3,10 +3,10 @@
 [![Go Report Card](https://goreportcard.com/badge/github.com/jupeter/git-updated-files)](https://goreportcard.com/report/github.com/jupeter/git-updated-files)
 [![License](https://img.shields.io/badge/license-MIT-green)](LICENSE)
 
-# GIT Helpers
+# GIT Updated Files
 
-GIT Helpers help to find list of changed files between two branches.
-The tool is dedicated mostly for CI/CD workflows.
+This is very simple GIT helper, that show list of changed files between two branches.
+The tool is dedicated for CI/CD workflow.
 
 The quickest way to try the command-line interface is an in-lined configuration.
 ```bash
