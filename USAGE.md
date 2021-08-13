@@ -1,4 +1,4 @@
-# GIT Helpers overview
+# GIT Updated Files overview
 
 ## Available flags for `git-updated-files`
 
