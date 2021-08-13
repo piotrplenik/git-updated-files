@@ -11,7 +11,8 @@ The tool is dedicated mostly for CI/CD workflows.
 The quickest way to try the command-line interface is an in-lined configuration.
 ```bash
 # Download the latest release as /usr/local/bin/git-updated-files
-$ curl https://raw.githubusercontent.com/jupeter/git-helpers/main/install.sh | bash -s -- -b /usr/local/bin
+$ curl https://raw.githubusercontent.com/jupeter/git-helpers/main/install.sh \
+    | bash -s -- -b /usr/local/bin
 # Run the command
 $ git-updated-files --target-ref master --filter ".(hcl|txt)"
 ```
